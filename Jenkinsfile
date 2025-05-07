@@ -1,85 +1,54 @@
-// Jenkinsfile (Declarative Pipeline)
-
 pipeline {
-    agent any // Specifies where the pipeline will execute. 'any' means any available agent.
+    agent any
 
     tools {
-        maven 'Maven3' // Matches the Maven configuration name in Jenkins Tools
-        jdk 'AdoptOpenJDK11' // Example, ensure this JDK name is configured in Jenkins > Tools > JDK installations
-    }
-
-    environment {
-        // Define any environment variables if needed
-        // EXAMPLE_VAR = 'some_value'
+        maven 'maven-3.9.1' // Name of Maven installation in Jenkins
+        jdk 'jdk-17'        // Name of JDK installation in Jenkins
     }
 
     stages {
-        stage('Checkout') { // Stage to clone the repository
+        stage('Checkout') {
             steps {
-                git branch: 'main', // Or your default branch e.g., 'master'
-                    credentialsId: 'your-github-credentials-id', // The ID you gave your GitHub credentials in Jenkins
-                    url: 'https://github.com/your-username/your-java-project.git' // Your repository URL
-                // For SSH, the URL would be like: 'git@github.com:your-username/your-java-project.git'
+                git 'https://github.com/chirayu16/simple-java-maven-app.git'
             }
         }
 
-        stage('Build') { // Stage to compile the code and run unit tests
+        stage('Build') {
             steps {
-                script {
-                    if (isUnix()) {
-                        sh 'mvn clean install'
-                    } else {
-                        bat 'mvn clean install'
-                    }
+                sh 'mvn clean compile'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
                 }
             }
         }
 
-        // Optional: Stage for running integration tests, static analysis, etc.
-        // stage('Test') {
-        //     steps {
-        //         script {
-        //             if (isUnix()) {
-        //                 sh 'mvn verify' // Or your specific test command
-        //             } else {
-        //                 bat 'mvn verify'
-        //             }
-        //         }
-        //     }
-        // }
-
-        stage('Archive Artifacts') { // Stage to archive the build artifact (e.g., .jar or .war)
+        stage('Package') {
             steps {
-                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true // Adjust path and pattern as per your project
-                // For WAR files: archiveArtifacts artifacts: 'target/*.war', fingerprint: true
+                sh 'mvn package'
             }
         }
 
-        // Optional: Stage for Deployment (CD part)
-        // stage('Deploy') {
-        //     when {
-        //         branch 'main' // Only deploy from the main branch
-        //     }
-        //     steps {
-        //         echo 'Deploying...'
-        //         // Add your deployment steps here (e.g., scp to server, docker push, etc.)
-        //     }
-        // }
+        stage('Archive Artifacts') {
+            steps {
+                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+            }
+        }
     }
 
-    post { // Actions to perform after the pipeline runs
-        always {
-            echo 'Pipeline finished.'
-            // Clean up workspace
-            // cleanWs()
-        }
+    post {
         success {
-            echo 'Pipeline succeeded!'
-            // Send notifications (e.g., email, Slack)
+            echo '✅ Build and test completed successfully.'
         }
         failure {
-            echo 'Pipeline failed.'
-            // Send notifications
+            echo '❌ Build failed. Check logs above.'
         }
     }
 }
