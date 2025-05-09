@@ -28,7 +28,7 @@ pipeline {
                     junit 'target/surefire-reports/*.xml'
                 }
             }
-        }
+        }   
 
         stage('Package') {
             steps {
@@ -50,5 +50,6 @@ pipeline {
         failure {
             echo '❌ Build failed. Check logs above.'
         }
+    
     }
 }
