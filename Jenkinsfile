@@ -16,6 +16,7 @@ pipeline {
         stage('Build') {
             steps {
                 bat 'mvn clean compile'
+            
             }
         }
 
@@ -33,7 +34,7 @@ pipeline {
         stage('Package') {
             steps {
                 bat 'mvn package'
-                
+
             }
         }
 
