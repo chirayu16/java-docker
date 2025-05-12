@@ -75,18 +75,18 @@ pipeline {
                 archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
             }
         }
-        stage('Prepare Maven Settings') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASS')]) {
-                    sh '''
-                        mkdir -p ~/.m2
-                        cp /var/lib/jenkins/maven-settings-templates/settings-template.xml ~/.m2/settings.xml
-                        sed -i "s/YOUR_NEXUS_USERNAME/$NEXUS_USER/g" ~/.m2/settings.xml
-                        sed -i "s/YOUR_NEXUS_PASSWORD/$NEXUS_PASS/g" ~/.m2/settings.xml
-                    '''
-                }
-            }
-        }
+        // stage('Prepare Maven Settings') {
+        //     steps {
+        //         withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASS')]) {
+        //             sh '''
+        //                 mkdir -p ~/.m2
+        //                 cp /var/lib/jenkins/maven-settings-templates/settings-template.xml ~/.m2/settings.xml
+        //                 sed -i "s/YOUR_NEXUS_USERNAME/$NEXUS_USER/g" ~/.m2/settings.xml
+        //                 sed -i "s/YOUR_NEXUS_PASSWORD/$NEXUS_PASS/g" ~/.m2/settings.xml
+        //             '''
+        //         }
+        //     }
+        // }
         // Add Publish to Nexus stage
         stage('Publish to Nexus') {
             steps {
@@ -132,6 +132,6 @@ pipeline {
         failure {
             echo '❌ Pipeline failed. Check logs above.'
         }
-        
+
     }
 }
