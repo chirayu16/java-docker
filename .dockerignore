@@ -1,0 +1,30 @@
+# Maven build output
+target/
+
+# Version control
+.git/
+.gitignore
+.gitattributes
+
+# CI/CD config
+.github/
+jenkins/
+Jenkinsfile
+
+# Documentation and license
+LICENSE.txt
+README.md
+
+# The Dockerfile itself
+Dockerfile
+
+# IDE file
+.idea/
+.vscode/
+.settings/
+.project
+.classpath
+
+# Other common ignores
+*.log
+*.lock
