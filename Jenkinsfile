@@ -13,11 +13,18 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/your-user/java-docker'
-            }
-        }
+stage('Checkout') {
+    steps {
+        checkout([
+            $class: 'GitSCM',
+            branches: [[name: '*/master']],
+            userRemoteConfigs: [[
+                url: 'https://github.com/your-user/java-docker',
+                credentialsId: 'github-new-pat'
+            ]]
+        ])
+    }
+}
 
         stage('Build JAR with Maven') {
             steps {
