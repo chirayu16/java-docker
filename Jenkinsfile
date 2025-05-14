@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         HARBOR_REGISTRY = 'harbor.startensystems.com'
-        IMAGE_NAME = 'simple-java-maven-app'
+        IMAGE_NAME = 'java-docker'
         IMAGE_TAG = "${BUILD_NUMBER}"
     }
 
@@ -15,7 +15,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/your-user/simple-java-maven-app.git', branch: 'master'
+                git url: 'https://github.com/your-user/java-docker', branch: 'master'
             }
         }
 
