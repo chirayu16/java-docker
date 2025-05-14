@@ -4,6 +4,7 @@ pipeline {
         HARBOR_REGISTRY = 'harbor.startensystems.com/test'
         IMAGE_NAME = 'java-docker'
         IMAGE_TAG = "${BUILD_NUMBER}"
+        FULL_IMAGE_NAME = "${HARBOR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
     }
     tools {
         maven 'maven-3.9.9' 
@@ -41,6 +42,17 @@ pipeline {
         stage('Push to Harbor') {
             steps {
                 sh "docker push ${HARBOR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
+            }
+        }
+        stage('Deploy Locally') {
+            steps {
+                script {
+                    sh """
+                        docker rm -f java-docker-app || true
+                        docker pull ${FULL_IMAGE_NAME}
+                        docker run -d --name java-docker-app -p 8080:8080 ${FULL_IMAGE_NAME}
+                    """
+                }
             }
         }
     }
