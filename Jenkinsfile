@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        HARBOR_REGISTRY = 'harbor.startensystems.com'
+        HARBOR_REGISTRY = 'harbor.startensystems.com/test'
         IMAGE_NAME = 'java-docker'
         IMAGE_TAG = "${BUILD_NUMBER}"
     }
