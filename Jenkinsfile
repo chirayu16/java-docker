@@ -19,7 +19,7 @@ stage('Checkout') {
             $class: 'GitSCM',
             branches: [[name: '*/master']],
             userRemoteConfigs: [[
-                url: 'https://github.com/your-user/java-docker',
+                url: 'https://github.com/your-user/java-docker.git',
                 credentialsId: 'github-new-pat'
             ]]
         ])
