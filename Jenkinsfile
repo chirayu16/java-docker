@@ -52,7 +52,7 @@ pipeline {
                         docker pull ${FULL_IMAGE_NAME}
                         docker run -d --name java-docker-app -p 8082:8080 ${FULL_IMAGE_NAME}
                         sleep 3
-                        docker logs -f jav-docker-app
+                        docker logs -f java-docker-app
                     """
                 }
             }
