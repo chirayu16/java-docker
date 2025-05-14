@@ -48,7 +48,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                        docker rm -f java-docker-app || true
+                        docker rm -f java-docker || true
                         docker pull ${FULL_IMAGE_NAME}
                         docker run -d --name java-docker-app -p 8080:8080 ${FULL_IMAGE_NAME}
                     """
