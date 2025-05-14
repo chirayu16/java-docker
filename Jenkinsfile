@@ -51,6 +51,8 @@ pipeline {
                         docker ps -aqf name=java-docker-app | xargs --no-run-if-empty docker rm -f
                         docker pull ${FULL_IMAGE_NAME}
                         docker run -d --name java-docker-app -p 8082:8080 ${FULL_IMAGE_NAME}
+                        sleep 3
+                        docker logs -f jav-docker-app
                     """
                 }
             }
